@@ -21,7 +21,7 @@ Source2:	https://github.com/Fraunhofer-IIS/mmtisobmff/archive/r%{mmtver}/mmtisob
 Patch0:		%{name}-soname.patch
 URL:		https://github.com/Fraunhofer-IIS/mpeghdec
 BuildRequires:	cmake >= 3.16
-BuildRequires:	libstdc++-devel
+BuildRequires:	libstdc++-devel >= 6:4.7
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -52,11 +52,15 @@ Pliki nagłówkowe biblioteki dekodera Fraunhofer MPEG-H.
 %patch -P0 -p1
 
 %build
+# relative INCLUDEDIR and LIBDIR for correct .pc
+# hack DATAROOTDIR to place arch-dependent .pc file in proper place
 %cmake -B build \
-	-DBUILD_SHARED_LIBS=ON \
-	-Dmpeghdec_BUILD_BINARIES=OFF \
+	-DCMAKE_INSTALL_DATAROOTDIR=%{_libdir} \
+	-DCMAKE_INSTALL_INCLUDEDIR=include \
+	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
 	-DFETCHCONTENT_SOURCE_DIR_ILO=$(pwd)/ilo-r%{ilover} \
-	-DFETCHCONTENT_SOURCE_DIR_MMTISOBMFF=$(pwd)/mmtisobmff-r%{mmtver}
+	-DFETCHCONTENT_SOURCE_DIR_MMTISOBMFF=$(pwd)/mmtisobmff-r%{mmtver} \
+	-Dmpeghdec_BUILD_BINARIES=OFF
 
 %{__make} -C build
 
@@ -74,13 +78,12 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc LICENSE.txt README.md
-%attr(755,root,root) %{_libdir}/libmpeghdec.so.*.*.*
+%doc AUTHORS.md CHANGELOG.md LICENSE.txt README.md
+%{_libdir}/libmpeghdec.so.*.*.*
 %ghost %{_libdir}/libmpeghdec.so.3
 
 %files devel
 %defattr(644,root,root,755)
 %{_libdir}/libmpeghdec.so
-%dir %{_includedir}/mpeghdec
-%{_includedir}/mpeghdec/*.h
-%{_datadir}/pkgconfig/mpeghdec.pc
+%{_includedir}/mpeghdec
+%{_pkgconfigdir}/mpeghdec.pc
