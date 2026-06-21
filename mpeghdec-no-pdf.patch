@@ -1,0 +1,29 @@
+--- mpeghdec-r3.0.3/doc/CMakeLists.txt.orig	2026-03-30 13:28:00.000000000 +0200
++++ mpeghdec-r3.0.3/doc/CMakeLists.txt	2026-06-21 16:55:26.462410378 +0200
+@@ -32,15 +32,6 @@ if(DOXYGEN_FOUND)
+     COMMENT "Create doxygen documentation"
+     VERBATIM
+   )
+-
+-  add_custom_command(
+-    TARGET ${PROJECT_NAME}_doc
+-    COMMAND make
+-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/latex
+-    COMMENT "Create doxygen PDF documentation"
+-    VERBATIM
+-    DEPENDS ${PROJECT_NAME}_doc
+-  )
+ else()
+   message("Doxygen need to be installed to generate the doxygen documentation")
+ endif()
+--- mpeghdec-r3.0.3/doc/Doxyfile.in.orig	2026-03-30 13:28:00.000000000 +0200
++++ mpeghdec-r3.0.3/doc/Doxyfile.in	2026-06-21 16:56:53.216214411 +0200
+@@ -1881,7 +1881,7 @@ EXTRA_SEARCH_MAPPINGS  =
+ # If the GENERATE_LATEX tag is set to YES, doxygen will generate LaTeX output.
+ # The default value is: YES.
+ 
+-GENERATE_LATEX         = YES
++GENERATE_LATEX         = NO
+ 
+ # The LATEX_OUTPUT tag is used to specify where the LaTeX docs will be put. If a
+ # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of

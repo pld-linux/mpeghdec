@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	apidocs		# API documentation (doxygen generated)
+
 # ilo and mmtisobmff are upstream static-only helper libraries pulled in via
 # CMake FetchContent (no network at build time in PLD), with no standalone
 # shared library or other consumer - so they are vendored here as Source1/Source2
@@ -20,9 +24,12 @@ Source2:	https://github.com/Fraunhofer-IIS/mmtisobmff/archive/r%{mmtver}/mmtisob
 # Source2-md5:	ba89ae2bcbb98b94651415502deba5e9
 Patch0:		%{name}-soname.patch
 Patch1:		%{name}-x32.patch
+Patch2:		%{name}-no-pdf.patch
 URL:		https://github.com/Fraunhofer-IIS/mpeghdec
 BuildRequires:	cmake >= 3.16
+%{?with_apidocs:BuildRequires:	doxygen}
 BuildRequires:	libstdc++-devel >= 6:4.7
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.605
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -33,8 +40,8 @@ ATSC 3.0 and other next-generation broadcast and streaming services.
 
 %description -l pl.UTF-8
 Dekoder Fraunhofera MPEG-H (mpeghdec) to biblioteka dekodera standardu
-MPEG-H 3D Audio (ISO/IEC 23008-3) - systemu dźwięku używanego przez ATSC
-3.0 oraz inne systemy nadawcze i streamingowe nowej generacji.
+MPEG-H 3D Audio (ISO/IEC 23008-3) - systemu dźwięku używanego przez
+ATSC 3.0 oraz inne systemy nadawcze i streamingowe nowej generacji.
 
 %package devel
 Summary:	Header files for Fraunhofer MPEG-H decoder library
@@ -48,10 +55,23 @@ Header files for Fraunhofer MPEG-H decoder library.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki dekodera Fraunhofer MPEG-H.
 
+%package apidocs
+Summary:	API documentation for MPEG-H decoder library
+Summary(pl.UTF-8):	Dokumentacja API biblioteki dekodera MPEG-H
+Group:		Documentation
+BuildArch:	noarch
+
+%description apidocs
+API documentation for MPEG-H decoder library.
+
+%description apidocs -l pl.UTF-8
+Dokumentacja API biblioteki dekodera MPEG-H.
+
 %prep
 %setup -q -n %{name}-r%{version} -a1 -a2
 %patch -P0 -p1
 %patch -P1 -p1
+%patch -P2 -p1 -b .orig
 
 %build
 # relative INCLUDEDIR and LIBDIR for correct .pc
@@ -62,7 +82,8 @@ Pliki nagłówkowe biblioteki dekodera Fraunhofer MPEG-H.
 	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
 	-DFETCHCONTENT_SOURCE_DIR_ILO=$(pwd)/ilo-r%{ilover} \
 	-DFETCHCONTENT_SOURCE_DIR_MMTISOBMFF=$(pwd)/mmtisobmff-r%{mmtver} \
-	-Dmpeghdec_BUILD_BINARIES=OFF
+	-Dmpeghdec_BUILD_BINARIES=OFF \
+	%{?with_apidocs:-Dmpeghdec_BUILD_DOC=ON}
 
 %{__make} -C build
 
@@ -89,3 +110,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libmpeghdec.so
 %{_includedir}/mpeghdec
 %{_pkgconfigdir}/mpeghdec.pc
+
+%if %{with apidocs}
+%files apidocs
+%defattr(644,root,root,755)
+%doc build/doc/doc/html/*
+%endif
