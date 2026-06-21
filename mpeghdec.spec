@@ -19,6 +19,7 @@ Source1:	https://github.com/Fraunhofer-IIS/ilo/archive/r%{ilover}/ilo-%{ilover}.
 Source2:	https://github.com/Fraunhofer-IIS/mmtisobmff/archive/r%{mmtver}/mmtisobmff-%{mmtver}.tar.gz
 # Source2-md5:	ba89ae2bcbb98b94651415502deba5e9
 Patch0:		%{name}-soname.patch
+Patch1:		%{name}-x32.patch
 URL:		https://github.com/Fraunhofer-IIS/mpeghdec
 BuildRequires:	cmake >= 3.16
 BuildRequires:	libstdc++-devel >= 6:4.7
@@ -50,6 +51,7 @@ Pliki nagłówkowe biblioteki dekodera Fraunhofer MPEG-H.
 %prep
 %setup -q -n %{name}-r%{version} -a1 -a2
 %patch -P0 -p1
+%patch -P1 -p1
 
 %build
 # relative INCLUDEDIR and LIBDIR for correct .pc
