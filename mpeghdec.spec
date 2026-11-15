@@ -5,19 +5,20 @@
 # ilo and mmtisobmff are upstream static-only helper libraries pulled in via
 # CMake FetchContent (no network at build time in PLD), with no standalone
 # shared library or other consumer - so they are vendored here as Source1/Source2
-# and linked statically into libmpeghdec.so rather than packaged separately.
+# and linked statically.
+# note: used only in demo, which is not built by default
 %define		ilover		2.0.2
 %define		mmtver		1.0.4
 Summary:	Fraunhofer MPEG-H 3D Audio decoder library
 Summary(pl.UTF-8):	Biblioteka dekodera dźwięku Fraunhofer MPEG-H 3D Audio
 Name:		mpeghdec
-Version:	3.0.3
+Version:	4.0.1
 Release:	1
 # Fraunhofer FDK MPEG-H Software License (source-redistributable; no patent grant)
 License:	distributable, patent license required in some countries
 Group:		Libraries
 Source0:	https://github.com/Fraunhofer-IIS/mpeghdec/archive/r%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	b7b51dedd99aeefb0d72eb5cc5e3ba7d
+# Source0-md5:	bf1b46ee4f66cb18d97ce7cb7846f0e7
 Source1:	https://github.com/Fraunhofer-IIS/ilo/archive/r%{ilover}/ilo-%{ilover}.tar.gz
 # Source1-md5:	cbff75a47b407df6d469b4b682d0c906
 Source2:	https://github.com/Fraunhofer-IIS/mmtisobmff/archive/r%{mmtver}/mmtisobmff-%{mmtver}.tar.gz
@@ -103,7 +104,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS.md CHANGELOG.md LICENSE.txt README.md
 %{_libdir}/libmpeghdec.so.*.*.*
-%ghost %{_libdir}/libmpeghdec.so.3
+%ghost %{_libdir}/libmpeghdec.so.4
 
 %files devel
 %defattr(644,root,root,755)

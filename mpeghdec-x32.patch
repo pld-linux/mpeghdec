@@ -1,11 +1,11 @@
-Remove duplicate functions (SHORT is equal to FIXP_SNG)
---- mpeghdec-r3.0.3/src/libFDK/include/common_fix.h.orig	2026-03-30 13:28:00.000000000 +0200
-+++ mpeghdec-r3.0.3/src/libFDK/include/common_fix.h	2026-06-21 08:53:40.087126384 +0200
+Remove duplicate functions (SHORT is equal to FIXP_SGL)
+--- mpeghdec-r4.0.1/src/libFDK/include/common_fix.h.orig	2026-07-24 12:25:09.000000000 +0200
++++ mpeghdec-r4.0.1/src/libFDK/include/common_fix.h	2026-11-15 21:14:30.408790405 +0100
 @@ -450,14 +450,6 @@ FDK_INLINE INT fMax(INT a, INT b) {
  FDK_INLINE INT fMin(INT a, INT b) {
    return fixmin_I(a, b);
  }
--#if !defined(_MSC_VER) && defined(__x86_64__)
+-#if !defined(_MSC_VER) && !defined(__MINGW32__) && defined(__x86_64__)
 -FDK_INLINE SHORT fMax(SHORT a, SHORT b) {
 -  return fixmax_S(a, b);
 -}

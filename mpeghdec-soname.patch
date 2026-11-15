@@ -1,12 +1,12 @@
---- mpeghdec-r3.0.3/src/CMakeLists.txt.orig
-+++ mpeghdec-r3.0.3/src/CMakeLists.txt
-@@ -9,6 +9,9 @@
+--- mpeghdec-r4.0.1/src/CMakeLists.txt.orig	2026-07-24 12:25:09.000000000 +0200
++++ mpeghdec-r4.0.1/src/CMakeLists.txt	2026-11-15 21:09:48.006986974 +0100
+@@ -9,6 +9,9 @@ endfunction()
  
  add_library(mpeghdec)
  install(TARGETS mpeghdec)
 +set_target_properties(mpeghdec PROPERTIES
 +  VERSION ${PROJECT_VERSION}
 +  SOVERSION ${PROJECT_VERSION_MAJOR})
- target_include_directories(mpeghdec PUBLIC "${PROJECT_SOURCE_DIR}/include")
- target_include_directories(mpeghdec PRIVATE "${PROJECT_SOURCE_DIR}/include/sys")
  
+ # ---------------------------------------------------------------------------
+ # Force-include the symbol-prefix header (see mpeghdec_SYMBOL_PREFIX in the root CMakeLists.txt file).
